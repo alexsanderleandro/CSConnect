@@ -1,0 +1,42 @@
+{
+  "name": "csconnect",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sistema de chat com administração de usuários e grupos.",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "date-fns": "^3.3.1",
+    "express": "^5.1.0",
+    "framer-motion": "^10.16.3",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.292.0",
+    "pg": "^8.16.3",
+    "postgres": "^3.4.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.3",
+    "react-scripts": "^5.0.1",
+    "sonner": "^1.0.0",
+    "sqlite3": "^5.1.7"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
