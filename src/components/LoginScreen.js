@@ -1,6 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function LoginScreen({ onLogin, onRegister }) {
+  const [titleOffset, setTitleOffset] = useState(0);
+
+  useEffect(() => {
+    // executa somente em ambiente browser
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
+    const mm = window.matchMedia('(min-width: 768px)');
+    const update = () => setTitleOffset(mm.matches ? -36 : -12);
+    update();
+    mm.addEventListener ? mm.addEventListener('change', update) : mm.addListener(update);
+    return () => { mm.removeEventListener ? mm.removeEventListener('change', update) : mm.removeListener(update); };
+  }, []);
   async function handleForgotSubmit() {
     setForgotMsg("");
     if (!forgotEmail) {
@@ -119,25 +130,32 @@ export default function LoginScreen({ onLogin, onRegister }) {
           <span role="img" aria-label="admin" style={{ fontSize: 28 }}>⚙️</span>
         </button>
       )}
-      <h1 style={{
-        fontFamily: 'Segoe UI, Arial, sans-serif',
-        fontWeight: 900,
-        fontSize: 48,
-        color: '#1e293b',
-        marginBottom: 0,
-        letterSpacing: 2,
-        textShadow: '2px 2px 8px #cbd5e1, 0 2px 0 #64748b, 0 4px 12px #334155'
-      }}>CSConnect</h1>
-      <div style={{
-        fontFamily: 'Segoe UI, Arial, sans-serif',
-        fontWeight: 500,
-        fontSize: 18,
-        color: 'rgba(51, 65, 85, 0.8)',
-        marginBottom: 16,
-        letterSpacing: 1,
-        textShadow: '1px 1px 4px #cbd5e1'
-      }}>by CEOsoftware</div>
-      <h2 style={{ fontSize: 32, marginBottom: 16, color: '#334155' }}>{adminMode ? "Login Administrador" : "Login"}</h2>
+  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ transform: `translateY(${titleOffset}px)`, transition: 'transform 220ms ease' }}>
+        <h1 style={{
+          fontFamily: 'Segoe UI, Arial, sans-serif',
+          fontWeight: 900,
+          fontSize: 48,
+          color: '#1e293b',
+          marginBottom: 0,
+          letterSpacing: 2,
+          textShadow: '2px 2px 8px #cbd5e1, 0 2px 0 #64748b, 0 4px 12px #334155'
+        }}>CSConnect</h1>
+        <div style={{
+          fontFamily: 'Segoe UI, Arial, sans-serif',
+          fontWeight: 500,
+          fontSize: 18,
+          color: 'rgba(51, 65, 85, 0.8)',
+          marginBottom: 8,
+          letterSpacing: 1,
+          textShadow: '1px 1px 4px #cbd5e1',
+          textAlign: 'center',
+          width: '100%',
+          maxWidth: 420
+        }}>by CEOsoftware</div>
+        </div>
+        <h2 style={{ fontSize: adminMode ? 32 : 22, marginBottom: 8, color: '#ffffff' }}>{adminMode ? "Login Administrador" : "Selecione o tipo de login"}</h2>
+      </div>
       <div style={{ display: "flex", gap: 16, marginBottom: 16 }}>
         <button
           type="button"
@@ -145,7 +163,7 @@ export default function LoginScreen({ onLogin, onRegister }) {
             fontSize: 18,
             padding: "8px 20px",
             borderRadius: 6,
-            background: loginType === "analista" ? "#6366f1" : "#e0e7ff",
+            background: loginType === "analista" ? "#000000" : "#e0e7ff",
             color: loginType === "analista" ? "#fff" : "#334155",
             border: "none",
             fontWeight: loginType === "analista" ? "bold" : "normal",
@@ -174,7 +192,7 @@ export default function LoginScreen({ onLogin, onRegister }) {
           <div style={{ background: '#fff', padding: 32, borderRadius: 12, boxShadow: '0 2px 16px #cbd5e1', minWidth: 320, display: 'flex', flexDirection: 'column', gap: 16 }}>
             <h3 style={{ margin: 0, fontSize: 22, color: '#334155' }}>Recuperar senha</h3>
             <label htmlFor="forgotEmail" style={{ fontWeight: 'bold', fontSize: 16 }}>Informe seu e-mail cadastrado:</label>
-            <input id="forgotEmail" type="email" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)} placeholder="E-mail" style={{ padding: '10px 12px', fontSize: 18, borderRadius: 6, border: '1px solid #cbd5e1' }} />
+            <input id="forgotEmail" type="email" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)} placeholder="seu e-mail" style={{ padding: '10px 12px', fontSize: 18, borderRadius: 6, border: '1px solid #cbd5e1' }} />
             <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
               <button type="button" style={{ padding: '8px 20px', borderRadius: 6, background: '#e0e7ff', color: '#334155', border: 'none' }} onClick={() => setShowForgot(false)}>Cancelar</button>
               <button type="button" style={{ padding: '8px 20px', borderRadius: 6, background: '#6366f1', color: '#fff', border: 'none', fontWeight: 'bold' }} onClick={handleForgotSubmit}>Recuperar</button>
@@ -183,9 +201,7 @@ export default function LoginScreen({ onLogin, onRegister }) {
           </div>
         </div>
       )}
-          <label htmlFor="email" style={{ fontWeight: "bold", fontSize: 18, marginBottom: 4 }}>
-            {loginType === "analista" ? "Usuário" : "E-mail"}
-          </label>
+          {/* labels visuais removidos para layout mais limpo; inputs preservam acessibilidade via aria-label */}
           {(loginType === "analista" || adminMode) ? (
             <div style={{ display: "flex", alignItems: "center", marginBottom: 16 }}>
               <input
@@ -193,7 +209,8 @@ export default function LoginScreen({ onLogin, onRegister }) {
                 type="text"
                 value={email}
                 onChange={e => setEmail(e.target.value.replace(/[^a-zA-Z0-9_.-]/g, ""))}
-                placeholder="Usuário"
+                placeholder="usuário"
+                aria-label="Usuário analista"
                 style={{
                   flex: 1,
                   padding: "10px 12px",
@@ -211,7 +228,8 @@ export default function LoginScreen({ onLogin, onRegister }) {
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              placeholder="E-mail"
+              placeholder="seu e-mail"
+              aria-label="E-mail do cliente"
               style={{
                 width: "100%",
                 padding: "10px 12px",
@@ -222,13 +240,14 @@ export default function LoginScreen({ onLogin, onRegister }) {
               }}
             />
           )}
-        <label style={{ fontSize: 20, marginBottom: 4 }}>Senha</label>
+        {/* label de senha visual removida; aria-label adicionado nos inputs de senha */}
         {loginType === "analista" ? (
           <input
             type="password"
             placeholder="Senha"
             value={password}
             onChange={e => setPassword(e.target.value)}
+            aria-label="Senha"
             style={{ width: "calc(60% + 190px)", maxWidth: 390, padding: "10px 12px", fontSize: 18, borderRadius: 6, border: "1px solid #cbd5e1", marginBottom: 16 }}
           />
         ) : (
@@ -237,10 +256,26 @@ export default function LoginScreen({ onLogin, onRegister }) {
             placeholder="Senha"
             value={password}
             onChange={e => setPassword(e.target.value)}
+            aria-label="Senha"
             style={{ width: "100%", padding: "10px 12px", fontSize: 18, borderRadius: 6, border: "1px solid #cbd5e1", marginBottom: 16 }}
           />
         )}
-  <button type="submit" style={{ fontSize: 20, padding: 12, borderRadius: 6, marginTop: 12, alignSelf: 'center', minWidth: 160 }}>Entrar</button>
+  <button
+    type="submit"
+    style={{
+      fontSize: 20,
+      padding: 12,
+      borderRadius: 8,
+      marginTop: 12,
+      alignSelf: 'center',
+      minWidth: 160,
+      border: 'none',
+      cursor: 'pointer',
+  background: loginType === 'analista' ? '#111827' : '#6366f1',
+  color: '#ffffff',
+  boxShadow: loginType === 'analista' ? '0 6px 0 rgba(0,0,0,0.15), 0 10px 20px rgba(2,6,23,0.25)' : '0 6px 0 rgba(99,102,241,0.22), 0 12px 28px rgba(99,102,241,0.18)'
+    }}
+  >Entrar</button>
   <button type="button" style={{ fontSize: 16, marginTop: 8, alignSelf: 'center', background: 'none', border: 'none', color: '#6366f1', textDecoration: 'underline', cursor: 'pointer' }} onClick={() => setShowForgot(true)}>Esqueci a senha</button>
       </form>
       {error && <div style={{ color: "red", marginTop: 8 }}>{error}</div>}
@@ -387,7 +422,7 @@ export function AdminLoginModal({ onLogin, onClose }) {
           type="password"
           value={adminPassword}
           onChange={e => setAdminPassword(e.target.value)}
-          placeholder="Senha"
+              placeholder="Senha"
           style={{ width: '100%', padding: '10px 12px', fontSize: 18, borderRadius: 6, border: '1px solid #cbd5e1', background: '#f5f7ff', marginBottom: 16 }}
         />
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>

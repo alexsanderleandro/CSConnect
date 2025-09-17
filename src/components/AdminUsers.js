@@ -170,7 +170,7 @@ export default function AdminUsers({ user, isAdmin: isAdminProp }) {
   }
 
   return (
-  <div style={{ margin: 24, maxWidth: 800, marginLeft: "auto", marginRight: "auto", minHeight: '100vh', backgroundImage: 'url(/assets/background.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
+  <div style={{ margin: 24, maxWidth: 800, marginLeft: "auto", marginRight: "auto", minHeight: '100vh', background: '#ffffff' }}>
       <h1 style={{ textAlign: "center", fontSize: 32, marginBottom: 24 }}>Administração</h1>
       <h2 style={{ fontSize: 24, marginBottom: 16 }}>Usuários</h2>
       {/* Configuração de e-mail para recuperação de senha */}
