@@ -177,7 +177,7 @@ export default function LoginScreen({ onLogin, onRegister }) {
             fontSize: 18,
             padding: "8px 20px",
             borderRadius: 6,
-            background: loginType === "cliente" ? "#6366f1" : "#e0e7ff",
+            background: loginType === "cliente" ? "rgba(0,0,0,0.85)" : "#e0e7ff",
             color: loginType === "cliente" ? "#fff" : "#334155",
             border: "none",
             fontWeight: loginType === "cliente" ? "bold" : "normal",
@@ -192,7 +192,7 @@ export default function LoginScreen({ onLogin, onRegister }) {
           <div style={{ background: '#fff', padding: 32, borderRadius: 12, boxShadow: '0 2px 16px #cbd5e1', minWidth: 320, display: 'flex', flexDirection: 'column', gap: 16 }}>
             <h3 style={{ margin: 0, fontSize: 22, color: '#334155' }}>Recuperar senha</h3>
             <label htmlFor="forgotEmail" style={{ fontWeight: 'bold', fontSize: 16 }}>Informe seu e-mail cadastrado:</label>
-            <input id="forgotEmail" type="email" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)} placeholder="seu e-mail" style={{ padding: '10px 12px', fontSize: 18, borderRadius: 6, border: '1px solid #cbd5e1' }} />
+            <input id="forgotEmail" type="email" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)} placeholder="Seu e-mail" style={{ padding: '10px 12px', fontSize: 18, borderRadius: 6, border: '1px solid #cbd5e1' }} />
             <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
               <button type="button" style={{ padding: '8px 20px', borderRadius: 6, background: '#e0e7ff', color: '#334155', border: 'none' }} onClick={() => setShowForgot(false)}>Cancelar</button>
               <button type="button" style={{ padding: '8px 20px', borderRadius: 6, background: '#6366f1', color: '#fff', border: 'none', fontWeight: 'bold' }} onClick={handleForgotSubmit}>Recuperar</button>
@@ -209,7 +209,7 @@ export default function LoginScreen({ onLogin, onRegister }) {
                 type="text"
                 value={email}
                 onChange={e => setEmail(e.target.value.replace(/[^a-zA-Z0-9_.-]/g, ""))}
-                placeholder="usuário"
+                placeholder="Usuário"
                 aria-label="Usuário analista"
                 style={{
                   flex: 1,
@@ -228,7 +228,7 @@ export default function LoginScreen({ onLogin, onRegister }) {
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              placeholder="seu e-mail"
+              placeholder="Seu e-mail"
               aria-label="E-mail do cliente"
               style={{
                 width: "100%",
@@ -271,7 +271,7 @@ export default function LoginScreen({ onLogin, onRegister }) {
       minWidth: 160,
       border: 'none',
       cursor: 'pointer',
-  background: loginType === 'analista' ? '#111827' : '#6366f1',
+  background: loginType === 'analista' ? '#111827' : 'rgba(0,0,0,0.85)',
   color: '#ffffff',
   boxShadow: loginType === 'analista' ? '0 6px 0 rgba(0,0,0,0.15), 0 10px 20px rgba(2,6,23,0.25)' : '0 6px 0 rgba(99,102,241,0.22), 0 12px 28px rgba(99,102,241,0.18)'
     }}
@@ -280,7 +280,17 @@ export default function LoginScreen({ onLogin, onRegister }) {
       </form>
       {error && <div style={{ color: "red", marginTop: 8 }}>{error}</div>}
       <div style={{ marginTop: 16 }}>
-        <span>Não tem conta? <button onClick={onRegister}>Cadastre-se</button></span>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>Não tem conta?
+          <button onClick={onRegister} style={{
+            padding: '8px 18px',
+            borderRadius: 9999,
+            background: '#6366f1',
+            color: '#fff',
+            border: 'none',
+            cursor: 'pointer',
+            fontWeight: '600'
+          }}>Cadastre-se</button>
+        </span>
       </div>
       {/* Modal de login admin - aparece apenas se adminMode estiver ativo */}
       {adminMode && (

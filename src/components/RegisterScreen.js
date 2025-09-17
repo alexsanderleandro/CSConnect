@@ -80,7 +80,7 @@ export default function RegisterScreen({ onRegistered }) {
         letterSpacing: 1,
         textShadow: '1px 1px 4px #cbd5e1'
       }}>by CEOsoftware</div>
-  <h2 style={{ fontSize: 32, marginBottom: 16, color: '#334155' }}>Cadastro</h2>
+  <h2 style={{ fontSize: 20, marginBottom: 16, color: '#ffffff' }}>Selecione o tipo de cadastro</h2>
       <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
         <button
           type="button"
@@ -96,11 +96,11 @@ export default function RegisterScreen({ onRegistered }) {
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16, minWidth: 320 }}>
         {loginTipo === "analista" ? (
           <>
-            <label style={{ fontSize: 20, marginBottom: 4 }}>E-mail</label>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <input
                 type="text"
-                placeholder="Seu usuário"
+                placeholder="Usuário"
+                aria-label="Usuário analista"
                 value={email.replace("@ceosoftware.com.br", "")}
                 onChange={e => setEmail(e.target.value.replace(/@ceosoftware\.com\.br$/, ""))}
                 style={{ fontSize: 18, padding: 12, borderRadius: 6, border: '1px solid #ccc', flex: 1 }}
@@ -110,10 +110,10 @@ export default function RegisterScreen({ onRegistered }) {
           </>
         ) : (
           <>
-            <label style={{ fontSize: 20, marginBottom: 4 }}>E-mail</label>
             <input
               type="email"
               placeholder="E-mail"
+              aria-label="E-mail do cliente"
               value={email}
               onChange={e => {
                 setEmail(e.target.value);
@@ -137,14 +137,11 @@ export default function RegisterScreen({ onRegistered }) {
         )}
         {loginTipo === "cliente" && (
           <>
-            <label style={{ fontSize: 20, marginBottom: 4 }}>Nome</label>
-            <input type="text" placeholder="Nome completo" value={nome} onChange={e => setNome(e.target.value)} style={{ fontSize: 18, padding: 12, borderRadius: 6, border: '1px solid #ccc' }} />
-            <label style={{ fontSize: 20, marginBottom: 4 }}>Nome da empresa</label>
-            <input type="text" placeholder="Nome da empresa" value={companyName} onChange={e => setCompanyName(e.target.value)} style={{ fontSize: 18, padding: 12, borderRadius: 6, border: '1px solid #ccc' }} />
+            <input type="text" placeholder="Nome completo" aria-label="Nome completo" value={nome} onChange={e => setNome(e.target.value)} style={{ fontSize: 18, padding: 12, borderRadius: 6, border: '1px solid #ccc' }} />
+            <input type="text" placeholder="Nome da empresa" aria-label="Nome da empresa" value={companyName} onChange={e => setCompanyName(e.target.value)} style={{ fontSize: 18, padding: 12, borderRadius: 6, border: '1px solid #ccc' }} />
           </>
         )}
-        <label style={{ fontSize: 20, marginBottom: 4 }}>Senha</label>
-        <input type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.value)} style={{ fontSize: 18, padding: 12, borderRadius: 6, border: '1px solid #ccc' }} />
+  <input type="password" placeholder="Senha" aria-label="Senha" value={password} onChange={e => setPassword(e.target.value)} style={{ fontSize: 18, padding: 12, borderRadius: 6, border: '1px solid #ccc' }} />
         <div style={{ display: 'flex', gap: 12, marginTop: 12, justifyContent: 'center' }}>
           <button type="submit" style={{ fontSize: 18, padding: 12, borderRadius: 6, minWidth: 120 }} disabled={bloqueioDominio}>Cadastrar</button>
           <button type="button" style={{ fontSize: 18, padding: 12, borderRadius: 6, background: '#eee', minWidth: 120 }} onClick={onRegistered}>Cancelar</button>
@@ -153,7 +150,17 @@ export default function RegisterScreen({ onRegistered }) {
       {error && <div style={{ color: "red", marginTop: 8 }}>{error}</div>}
       {success && <div style={{ color: "green", marginTop: 8 }}>{success}</div>}
       <div style={{ marginTop: 16 }}>
-        <span>Já tem conta? <button onClick={onRegistered}>Entrar</button></span>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>Já tem conta?
+          <button onClick={onRegistered} style={{
+            padding: '8px 18px',
+            borderRadius: 9999,
+            background: '#6366f1',
+            color: '#fff',
+            border: 'none',
+            cursor: 'pointer',
+            fontWeight: '600'
+          }}>Entrar</button>
+        </span>
       </div>
     </div>
   );
