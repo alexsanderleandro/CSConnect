@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { AuthContext } from '../contexts/AuthContext';
 
 export default function AdminDepartamentos() {
+  const auth = useContext(AuthContext);
+  const token = auth ? auth.token : null;
   const [departamentos, setDepartamentos] = useState([]);
   const [novoNome, setNovoNome] = useState("");
   const [editId, setEditId] = useState(null);
@@ -29,7 +32,7 @@ export default function AdminDepartamentos() {
     try {
       const res = await fetch("/departamentos", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: Object.assign({ "Content-Type": "application/json" }, token ? { Authorization: `Bearer ${token}` } : {}),
         body: JSON.stringify({ nome: novoNome })
       });
       const data = await res.json();
@@ -57,7 +60,7 @@ export default function AdminDepartamentos() {
     try {
       await fetch(`/departamentos/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: Object.assign({ "Content-Type": "application/json" }, token ? { Authorization: `Bearer ${token}` } : {}),
         body: JSON.stringify({ nome: nomeFinal })
       });
       setDepartamentos(departamentos.map(d => d.id === id ? { ...d, nome: nomeFinal } : d));
@@ -72,7 +75,7 @@ export default function AdminDepartamentos() {
   async function inativarDepartamento(id) {
     if (!window.confirm("Inativar este departamento?")) return;
     try {
-      await fetch(`/departamentos/${id}/inativar`, { method: "PUT" });
+      await fetch(`/departamentos/${id}/inativar`, { method: "PUT", headers: token ? { Authorization: `Bearer ${token}` } : {} });
       setDepartamentos(departamentos.map(d => d.id === id ? { ...d, ativo: false } : d));
     } catch {
       alert("Erro ao inativar departamento");

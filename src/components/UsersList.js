@@ -26,5 +26,11 @@ export default function UsersList() {
 
   if (loading) return <div>Carregando usuários...</div>;
   if (error) return <div style={{ color: "red" }}>{error}</div>;
+
+  // Filtra usuários online do domínio ceosoftware e clientes
+  const onlineCeosoftware = online.filter(u => u.email && u.email.endsWith('@ceosoftware.com.br'));
+  const onlineClientes = online.filter(u => u.email && !u.email.endsWith('@ceosoftware.com.br'));
+
+  // Não exibe colunas de analistas/clientes logados na tela principal
   return null;
 }

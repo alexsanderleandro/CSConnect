@@ -57,7 +57,10 @@ export default function RegisterScreen({ onRegistered }) {
       alignItems: "center",
       justifyContent: "center",
       height: "100vh",
-      background: "linear-gradient(135deg, #f8fafc 0%, #e0e7ff 50%, #ffe4e6 100%)"
+  backgroundImage: 'url(/assets/background.jpg)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
     }}>
       <h1 style={{
         fontFamily: 'Segoe UI, Arial, sans-serif',
