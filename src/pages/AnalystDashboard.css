@@ -1,0 +1,8 @@
+.analyst-shell { display: flex; gap: 16px; }
+.analyst-sidebar { width: 280px; }
+.analyst-main { flex: 1; height: 80vh; border: 1px solid #eee; }
+@media (max-width: 720px){
+  .analyst-shell { flex-direction: column; }
+  .analyst-sidebar { width: 100%; }
+  .analyst-main { height: 60vh; }
+}

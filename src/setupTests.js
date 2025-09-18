@@ -4,4 +4,10 @@ const { TextEncoder, TextDecoder } = require('util');
 if (typeof global.TextEncoder === 'undefined') global.TextEncoder = TextEncoder;
 if (typeof global.TextDecoder === 'undefined') global.TextDecoder = TextDecoder;
 
-// You can add other global test setup here if needed.
+// jest-dom adds custom jest matchers for asserting on DOM nodes.
+// allows: expect(element).toBeInTheDocument()
+try {
+	require('@testing-library/jest-dom/extend-expect');
+} catch (e) {
+	// ignore if not installed in this environment
+}

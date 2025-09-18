@@ -11,13 +11,17 @@ export default function AdminDepartamentos() {
   const [rascunho, setRascunho] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [incluirLoading, setIncluirLoading] = useState(false);
+  const [sucessoMsg, setSucessoMsg] = useState("");
 
   useEffect(() => {
     async function fetchDepartamentos() {
       try {
         const res = await fetch("/departamentos");
         const data = await res.json();
-        setDepartamentos(data.departamentos || []);
+        // Normalize possible response shapes: either { departamentos: [...] } or [...]
+        const list = Array.isArray(data) ? data : (data && data.departamentos) ? data.departamentos : [];
+        setDepartamentos((list || []).filter(Boolean));
       } catch (err) {
         setError("Erro ao buscar departamentos: " + (err.message || err));
       } finally {
@@ -29,6 +33,8 @@ export default function AdminDepartamentos() {
 
   async function incluirDepartamento() {
     if (!novoNome.trim()) return;
+    setIncluirLoading(true);
+    setError("");
     try {
       const res = await fetch("/departamentos", {
         method: "POST",
@@ -36,10 +42,28 @@ export default function AdminDepartamentos() {
         body: JSON.stringify({ nome: novoNome })
       });
       const data = await res.json();
-      setDepartamentos([...departamentos, data.departamento]);
+      // Accept different possible response shapes: { departamento: {...} } or the department object directly
+      const novo = data && (data.departamento || (Array.isArray(data) ? null : data)) || null;
+      if (novo) {
+        setDepartamentos([...departamentos, novo].filter(Boolean));
+        setSucessoMsg('Departamento incluído com sucesso');
+        // auto-hide
+        setTimeout(() => setSucessoMsg(''), 3000);
+      } else {
+        // fallback: re-fetch the list to ensure consistent state
+        const r = await fetch('/departamentos');
+        const d = await r.json();
+        const list = Array.isArray(d) ? d : (d && d.departamentos) ? d.departamentos : [];
+        setDepartamentos((list || []).filter(Boolean));
+        setSucessoMsg('Departamento incluído (lista atualizada)');
+        setTimeout(() => setSucessoMsg(''), 3000);
+      }
       setNovoNome("");
-    } catch {
-      alert("Erro ao incluir departamento");
+    } catch (err) {
+      console.error('Erro incluirDepartamento', err);
+      setError('Erro ao incluir departamento: ' + (err && err.message ? err.message : '')); 
+    } finally {
+      setIncluirLoading(false);
     }
   }
 
@@ -87,6 +111,12 @@ export default function AdminDepartamentos() {
 
   return (
     <div style={{ margin: 24 }}>
+      {/* success toast */}
+      {sucessoMsg && (
+        <div role="status" aria-live="polite" style={{ position: 'fixed', top: 16, right: 16, background: '#16a34a', color: 'white', padding: '8px 12px', borderRadius: 6, boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
+          {sucessoMsg}
+        </div>
+      )}
       <h2>Administração de Departamentos</h2>
       <div style={{ marginBottom: 16 }}>
         <input
@@ -108,33 +138,33 @@ export default function AdminDepartamentos() {
           </tr>
         </thead>
         <tbody>
-          {departamentos.map(d => (
-            <tr key={d.id}>
-              <td>{d.id}</td>
+          {departamentos.filter(Boolean).map((d, idx) => (
+            <tr key={d?.id ?? idx}>
+              <td>{d?.id ?? "-"}</td>
               <td>
-                {editId === d.id ? (
+                {editId === d?.id ? (
                   <>
                     <input
                       type="text"
                       maxLength={40}
-                      value={rascunho[d.id] ?? d.nome}
-                      onChange={e => alterarRascunho(d.id, e.target.value)}
+                      value={rascunho[d?.id] ?? d?.nome ?? ""}
+                      onChange={e => alterarRascunho(d?.id, e.target.value)}
                     />
-                    <button onClick={() => salvarEdicao(d.id)}>Salvar</button>
-                    <button onClick={() => { setEditId(null); setEditNome(""); setRascunho({ ...rascunho, [d.id]: undefined }); }}>Cancelar</button>
+                    <button onClick={() => salvarEdicao(d?.id)}>Salvar</button>
+                    <button onClick={() => { setEditId(null); setEditNome(""); setRascunho({ ...rascunho, [d?.id]: undefined }); }}>Cancelar</button>
                   </>
                 ) : (
                   <>
-                    {d.nome}
-                    {d.ativo && (
-                      <button style={{ marginLeft: 8 }} onClick={() => iniciarEdicao(d.id, d.nome)}>Editar</button>
+                    {d?.nome ?? "(sem nome)"}
+                    {d?.ativo && (
+                      <button style={{ marginLeft: 8 }} onClick={() => iniciarEdicao(d?.id, d?.nome)}>Editar</button>
                     )}
                   </>
                 )}
               </td>
-              <td>{d.ativo ? "Sim" : "Não"}</td>
+              <td>{d?.ativo ? "Sim" : "Não"}</td>
               <td>
-                {d.ativo && <button onClick={() => inativarDepartamento(d.id)}>Inativar</button>}
+                {d?.ativo && <button onClick={() => inativarDepartamento(d?.id)}>Inativar</button>}
               </td>
             </tr>
           ))}
