@@ -122,8 +122,26 @@ export default function LoginScreen({ onLogin, onRegister }) {
           </div>
 
           <div style={{ display: 'flex', gap: 8, marginBottom: 16, justifyContent: 'center' }}>
-            <button type="button" onClick={() => setLoginType('analista')} style={{ padding: '8px 18px', borderRadius: 9999, border: 'none', cursor: 'pointer', fontWeight: loginType === 'analista' ? '700' : '500', background: loginType === 'analista' ? 'linear-gradient(90deg,#4f46e5,#6366f1)' : '#f1f5f9', color: loginType === 'analista' ? '#fff' : '#475569', boxShadow: loginType === 'analista' ? '0 6px 18px rgba(79,70,229,0.16)' : 'none' }}>Analista</button>
-            <button type="button" onClick={() => setLoginType('cliente')} style={{ padding: '8px 18px', borderRadius: 9999, border: 'none', cursor: 'pointer', fontWeight: loginType === 'cliente' ? '700' : '500', background: loginType === 'cliente' ? 'linear-gradient(90deg,#4f46e5,#6366f1)' : '#f1f5f9', color: loginType === 'cliente' ? '#fff' : '#475569', boxShadow: loginType === 'cliente' ? '0 6px 18px rgba(79,70,229,0.16)' : 'none' }}>Cliente</button>
+            <button
+              type="button"
+              onClick={() => {
+                setLoginType('analista');
+                setEmail('');
+                setPassword('');
+                setError('');
+              }}
+              style={{ padding: '8px 18px', borderRadius: 9999, border: 'none', cursor: 'pointer', fontWeight: loginType === 'analista' ? '700' : '500', background: loginType === 'analista' ? 'linear-gradient(90deg,#4f46e5,#6366f1)' : '#f1f5f9', color: loginType === 'analista' ? '#fff' : '#475569', boxShadow: loginType === 'analista' ? '0 6px 18px rgba(79,70,229,0.16)' : 'none' }}
+            >Analista</button>
+            <button
+              type="button"
+              onClick={() => {
+                setLoginType('cliente');
+                setEmail('');
+                setPassword('');
+                setError('');
+              }}
+              style={{ padding: '8px 18px', borderRadius: 9999, border: 'none', cursor: 'pointer', fontWeight: loginType === 'cliente' ? '700' : '500', background: loginType === 'cliente' ? 'linear-gradient(90deg,#4f46e5,#6366f1)' : '#f1f5f9', color: loginType === 'cliente' ? '#fff' : '#475569', boxShadow: loginType === 'cliente' ? '0 6px 18px rgba(79,70,229,0.16)' : 'none' }}
+            >Cliente</button>
           </div>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14, minWidth: 280 }}>
@@ -173,10 +191,22 @@ export default function LoginScreen({ onLogin, onRegister }) {
 
             <div style={{ textAlign: 'center', marginTop: 8 }}>
               <span style={{ color: '#475569', marginRight: 8 }}>Não tem conta?</span>
-              <button onClick={onRegister} style={{ padding: '8px 18px', borderRadius: 9999, background: '#6366f1', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: '600' }}>Cadastre-se</button>
+              <button
+                onClick={() => {
+                  setEmail('');
+                  setPassword('');
+                  setError('');
+                  if (onRegister) onRegister();
+                }}
+                style={{ padding: '8px 18px', borderRadius: 9999, background: '#6366f1', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: '600' }}
+              >Cadastre-se</button>
             </div>
 
-            {error && <div style={{ color: 'red', marginTop: 8 }}>{error}</div>}
+            {error && (
+              <div style={{ color: 'red', marginTop: 8, textAlign: 'center', width: '100%' }}>
+                {error}
+              </div>
+            )}
           </form>
 
           {adminMode && <AdminLoginModalWrapper onLogin={onLogin} isOpen={adminMode} onClose={() => setAdminMode(false)} />}
